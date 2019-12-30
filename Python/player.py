@@ -21,19 +21,20 @@ class Player:
 
     def draw(self):
         # print('Drawing player')
-        iterations = int(2 * self.radius * pi)
-        s = sin(2 * pi / iterations)
-        c = cos(2 * pi / iterations)
+        if self.alive:
+            iterations = int(2 * self.radius * pi)
+            s = sin(2 * pi / iterations)
+            c = cos(2 * pi / iterations)
 
-        dx, dy = self.radius, 0
+            dx, dy = self.radius, 0
 
-        glColor3f(0.8, 0.8, 0)
-        glBegin(GL_TRIANGLE_FAN)
-        glVertex2f(self.pos_x, self.pos_y)
-        for i in range(iterations + 1):
-            glVertex2f(self.pos_x + dx, self.pos_y + dy)
-            dx, dy = (dx * c - dy * s), (dy * c + dx * s)
-        glEnd()
+            glColor3f(0.8, 0.8, 0)
+            glBegin(GL_TRIANGLE_FAN)
+            glVertex2f(self.pos_x, self.pos_y)
+            for i in range(iterations + 1):
+                glVertex2f(self.pos_x + dx, self.pos_y + dy)
+                dx, dy = (dx * c - dy * s), (dy * c + dx * s)
+            glEnd()
         pass
 
     def reset(self):
@@ -54,7 +55,8 @@ class Player:
             self.vel_y = -7
 
         if not self.alive:
-            self.reset()
+            # self.reset()
+            pass
         else:
             self.score += 1
         self.draw()
