@@ -1,9 +1,10 @@
 from player import Player
 from pipe import Pipe
 import pyglet
+import os
+import neat
 pyglet.options['debug_gl'] = False
 
-SPACE_BAR = 32
 WINDOW_HEIGHT = 500
 WINDOW_WIDTH = 500
 PLAYER_RADIUS = 18
@@ -11,16 +12,25 @@ PLAYER_HEIGHT = 2 * PLAYER_RADIUS
 PIPE_STARTING_POSITIONS = [600, 900, 1200]
 POP_SIZE = 10
 
-def main():
+def main(config_file):
+    config = neat.config.Config(neat.DefaultGenome,
+                                neat.DefaultReproduction,
+                                neat.DefaultSpeciesSet,
+                                neat.DefaultStagnation,
+                                config_file)
+    population = neat.Population(config)
+    # winner = p.run(eval_genomes)
     players = initialize_players()
     dead_players = []
-    pipes = [Pipe(600, PLAYER_HEIGHT),
-            Pipe(900, PLAYER_HEIGHT),
-            Pipe(1200, PLAYER_HEIGHT)]
+    pipes = [Pipe(PIPE_STARTING_POSITIONS[0], PLAYER_HEIGHT),
+            Pipe(PIPE_STARTING_POSITIONS[1], PLAYER_HEIGHT),
+            Pipe(PIPE_STARTING_POSITIONS[2], PLAYER_HEIGHT)]
     window = pyglet.window.Window(height = WINDOW_HEIGHT, width = WINDOW_WIDTH)
     pass
 
     def update(self):
+        # Do i need to alter this to be my eval genomes?
+        # Or do i need to make an entirely different method for eval genomes?
         window.clear()
         draw_background()
         if players_alive() == 0:
@@ -110,11 +120,12 @@ def main():
     pyglet.app.run()
 
 def initialize_players():
-    print('ayyyy')
     players = []
     for _ in range(POP_SIZE):
         players.append(Player(200, 250))
     return players
 
 if __name__ == '__main__':
-    main()
+    local_dir = os.path.dirname(__file__)
+    config_file = os.path.join(local_dir, 'config-feedforward.txt')
+    main(config_file)
